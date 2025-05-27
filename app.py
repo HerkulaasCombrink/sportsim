@@ -47,8 +47,10 @@ col1, col2, col3 = st.columns([1, 1, 1.5])
 # --- SVG Avatar ---
 with col1:
     st.subheader("Avatar")
-    clicked_part = render_svg_avatar(st.session_state.sim_state["body_state"])
-    if clicked_part:
+    from utils.visuals import render_static_avatar, select_body_part_for_damage
+    render_static_avatar()
+    clicked_part = select_body_part_for_damage()
+    if clicked_part != "None":
         apply_manual_damage(clicked_part)
 
 # --- Vital Stats ---
