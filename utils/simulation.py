@@ -57,4 +57,16 @@ def apply_damage_to_body(part, damage_type="Manual"):
     state = st.session_state.sim_state
     impact = BODY_PART_IMPACTS.get(part, {"fatigue": 0, "cognition": 0})
 
-    state["body_state"][part] +_]()
+    state["body_state"][part] += 1
+    state["fatigue"] += impact["fatigue"]
+    state["cognition"] -= impact["cognition"]
+
+    # Log damage
+    new_log = pd.DataFrame([{
+        "Time": state["current_time"],
+        "Body Part": part,
+        "Damage Type": damage_type,
+        "Fatigue Δ": impact["fatigue"],
+        "Cognition Δ": -impact["cognition"]
+    }])
+    state["damage_log"] = pd.concat([state["damage_log"], new_log], ignore_index=True)
